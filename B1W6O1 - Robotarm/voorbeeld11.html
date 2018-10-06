@@ -1,0 +1,104 @@
+<html>
+    <body>
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <script src="./robot-arm.js"></script>
+        <script>
+            // Robotarm bibliotheek inladen
+            var canvas = document.getElementById("canvas");
+            var robotArm = new RobotArm(canvas);
+            
+            // Het level inladen
+            robotArm.loadLevel("exercise 11");
+            
+            // Jou instructies volgen hier
+            robotArm.speed = 1000;
+            var whiteAmount = 0;
+            var disCorrection =  0;
+            for (var i = 8; i >= 0; i--){
+            	if (whiteAmount >= 1 && robotArm.scan() == "white"){
+            		robotArm.drop();
+            		robotArm.moveRight();
+            		robotArm.grab();
+            		if (robotArm.scan() == "white"){
+            			whiteAmount++;
+            		} else {
+            			robotArm.drop();
+            			robotArm.moveLeft();
+            			robotArm.grab();
+            			robotArm.moveRight();
+            			robotArm.drop();
+            			whiteAmount--;
+            			for (var j = 0; j < whiteAmount; j++){
+            				disCorrection++;
+	            			for (var k = 0; k < 2; k++){
+	            				robotArm.moveLeft();
+	            			}
+	            			robotArm.grab();
+	            			robotArm.moveRight();
+	            			robotArm.drop();
+	            		}
+	            		whiteAmount = 0;
+	            		for (var k = 0; k < disCorrection; k++){
+	            			robotArm.moveRight();
+	            		}
+	            		disCorrection = 0;
+            		}   		
+            	} else if (whiteAmount <= 0){
+	            	robotArm.moveRight();
+	            	robotArm.grab();
+	            	if (robotArm.scan() == "white"){
+	            		if (i == 0){
+	            			robotArm.drop();
+	            			break;
+	            		}
+	            		whiteAmount++;
+	            		robotArm.drop();
+	            		robotArm.moveRight();
+	            		robotArm.grab();
+	            		i--;
+	            		if (robotArm.scan() != "white"){
+	            			robotArm.drop();
+	            			robotArm.moveLeft();
+	            			robotArm.grab();
+	            			robotArm.moveRight();
+	            			robotArm.drop();
+	            			whiteAmount = 0;
+	            		} else {	
+		            		whiteAmount++;
+		            		robotArm.grab();
+	            		}
+	            	} else {
+	            		robotArm.drop();
+	            	}
+          	    }
+
+          	    if (i == 0 && whiteAmount >= 1){
+          	    	whiteAmount--;
+            		robotArm.drop();
+            		robotArm.moveLeft();
+            		robotArm.grab();
+            		robotArm.moveRight();
+            		robotArm.drop();
+            		whiteAmount--;
+            		for (var j = 0; j < whiteAmount; j++){
+            			disCorrection++;
+	            		for (var k = 0; k < 2; k++){
+	            			robotArm.moveLeft();
+	            		}
+	            		robotArm.grab();
+	            		robotArm.moveRight();
+	            		robotArm.drop();
+	            	}
+	            	whiteAmount = 0;
+	            	for (var k = 0; k < disCorrection; k++){
+	            		robotArm.moveRight();
+	            	}
+	            	disCorrection = 0;
+          	    }
+            }
+            
+            // De door jou opgegeven instructies uitvoeren
+            robotArm.run();
+        </script>
+    </body>
+</html>
