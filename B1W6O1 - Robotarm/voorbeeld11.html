@@ -12,10 +12,10 @@
             
             // Jou instructies volgen hier
             robotArm.speed = 1000;
-            for (var i = 0; i <= 7; i++){
+            for (var i = 0; i <= 8; i++){
             	robotArm.moveRight();
             }
-            for (var j = 0; j <= 7; j++){
+            for (var j = 0; j <= 8; j++){
             	robotArm.grab();
             	if (robotArm.scan() == "white"){
             		robotArm.moveRight();
